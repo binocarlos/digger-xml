@@ -1,0 +1,33 @@
+{
+  "name": "digger-xml",
+  "version": "0.0.1",
+  "description": "The XML parser for digger container data",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/binocarlos/digger-xml.git"
+  },
+  "keywords": [
+    "digger",
+    "xml"
+  ],
+  "author": "Kai Davenport",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "776737bfd2aca1d01dab58cf0e620fabc080a744",
+  "bugs": {
+    "url": "https://github.com/binocarlos/digger-xml/issues"
+  },
+  "dependencies": {
+    "xmldom": "~0.1.16",
+    "lodash": "~1.3.1"
+  },
+  "devDependencies": {
+    "digger-client": "0.0.3",
+    "mocha": "~1.12.0",
+    "should": "~1.2.2"
+  }
+}
