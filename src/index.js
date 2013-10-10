@@ -66,7 +66,16 @@ function data_factory(element){
 
   _.each(element.attributes, function(attr){
     if(!metafields[attr.name] && !manualfields[attr.name]){
-      data[attr.name] = attr.value;
+
+      var value = attr.value;
+
+      if(value.match(/^[-\.\d]+$/)){
+        var numvalue = parseFloat(value);
+        if(!isNaN(numvalue)){
+          value = numvalue;
+        }
+      }
+      data[attr.name] = value;
     }
   })
 
