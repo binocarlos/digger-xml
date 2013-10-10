@@ -75,6 +75,14 @@ function data_factory(element){
           value = numvalue;
         }
       }
+
+      if(value==='true'){
+        value = true;
+      }
+      else if(value==='false'){
+        value = false;
+      }
+
       data[attr.name] = value;
     }
   })
