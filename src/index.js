@@ -132,7 +132,7 @@ function XMLParser(st){
 
     // we remove nulls and process attriubutes
     // realchildren becomes the actual model array
-    var real_children = model._children.filter(function(child){
+    var real_children = (model._children || []).filter(function(child){
       // the child is a property wrapper
       if(child._digger.tag==model._digger.tag + '__attr'){
 
