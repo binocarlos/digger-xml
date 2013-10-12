@@ -12,6 +12,25 @@ module.exports.simplexml = [
   '</folder>'
 ].join("\n");
 
+module.exports.blueprintxml = [
+  '<folder>',
+
+  '  <blueprint name="folder">',
+  '    <blueprint__attr name="desc">',
+  '       hello this is raw text',
+  '    </blueprint__attr>',
+  '    <field name="name" required="true" />',
+  '  </blueprint>',
+
+  '  <blueprint name="warehouse" leaf="true">',
+  '    <field name="name" />',
+  '    <field name="access" type="warehouse_access" />',
+  '    <field name="readme" type="markdown" />',
+  '  </blueprint>',
+
+  '</folder>'
+].join("\n");
+
 module.exports.citiesxml = [ 
   '<folder id="places" class="hello">',
   '  <country class="big apples" name="UK">',

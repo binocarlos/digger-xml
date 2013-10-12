@@ -34,4 +34,17 @@ describe('container', function(){
     
   })
 
+  it('should process nested attribute tags', function() {
+
+    var test = Container(XML.parse(data.blueprintxml));
+
+    test.find('blueprint[name=folder]').count().should.equal(1);
+    var match = test.find('blueprint[name=folder]').attr('desc').match(/this is raw text/);
+
+    (match!=null).should.equal(true);
+    
+
+    
+  })
+
 })

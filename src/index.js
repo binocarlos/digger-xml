@@ -36,6 +36,21 @@ function null_filter(val){
 
 function data_factory(element){
 
+  if(element.nodeType==element.TEXT_NODE){
+    var value = element.nodeValue;
+
+    if(value.match(/^[\s\n\r]+$/)){
+      return;
+    }
+
+    return {
+      _digger:{
+        tag:'textnode'
+      },
+      value:value
+    }
+  }
+
   if(element.nodeType!=element.ELEMENT_NODE){
     return;
   }
@@ -87,7 +102,10 @@ function data_factory(element){
     }
   })
 
-  data._children = _.filter(_.map(element.childNodes, data_factory), null_filter);
+  var child_data = _.filter(_.map(element.childNodes, data_factory), null_filter);
+
+  
+  data._children = child_data;
 
   return data;
 }
@@ -108,6 +126,45 @@ function XMLParser(st){
   var DOMParser = xml.DOMParser;
   var doc = new DOMParser().parseFromString(st);
   var results = _.map(doc.childNodes, data_factory);
+
+  // looks at the children to flatten fields into models
+  function process_model(model){
+
+    // we remove nulls and process attriubutes
+    // realchildren becomes the actual model array
+    var real_children = model._children.filter(function(child){
+      // the child is a property wrapper
+      if(child._digger.tag==model._digger.tag + '__attr'){
+
+        var prop = child.name;
+        var value = child.value;
+
+        // did we contain a text node?
+        if(child._children && child._children.length>0){
+          var textchild = child._children[0];
+          if(textchild._digger.tag=='textnode'){
+            value = textchild.value;
+          }
+        }
+
+        model[prop] = value;
+
+        return false;
+      }
+      else{
+        return true;
+      }
+    })
+
+    model._children = real_children;
+    model._children.forEach(process_model);
+
+    return model;
+
+  }
+
+  results = results.map(process_model);
+
   
   return results;
 }
