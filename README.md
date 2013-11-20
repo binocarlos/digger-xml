@@ -1,6 +1,8 @@
 digger-xml
 ==========
 
+![Build status](https://api.travis-ci.org/binocarlos/digger-xml.png)
+
 An XML parser/stringifier for digger container data
 
 ## example
@@ -134,3 +136,4 @@ $ make browser-test
 ## licence
 
 MIT
+
