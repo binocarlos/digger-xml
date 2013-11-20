@@ -1,4 +1,8 @@
-module.exports.simplexml = [
+var XML = require('digger-xml');
+
+var testdata = {};
+
+testdata.simplexml = [
   '<folder>',
   ' <product name="Chair" class="red">',
   '   <caption name="User1" class="blue" />',
@@ -12,7 +16,7 @@ module.exports.simplexml = [
   '</folder>'
 ].join("\n");
 
-module.exports.blueprintxml = [
+testdata.blueprintxml = [
   '<folder>',
 
   '  <blueprint name="folder">',
@@ -31,7 +35,13 @@ module.exports.blueprintxml = [
   '</folder>'
 ].join("\n");
 
-module.exports.citiesxml = [ 
+testdata.attrxml = [
+  '<folder>',
+  '<attr name="notes">hello world</attr>',
+  '</folder>'
+].join("\n");
+
+testdata.citiesxml = [ 
   '<folder id="places" class="hello">',
   '  <country class="big apples" name="UK">',
   '    <city class="south" name="Bristol" team="Bristol City">',
@@ -69,3 +79,92 @@ module.exports.citiesxml = [
   '  </country>',
   '</folder>'
 ].join("\n");
+
+
+describe('digger-xml', function(){
+
+  it('should have a parse function', function () {
+    XML.parse.should.be.an.instanceOf(Function);
+  });
+
+  it('should have a stringify function', function () {
+    XML.stringify.should.be.an.instanceOf(Function);
+  });
+
+  it('should process the city XML', function() {
+
+    var data = XML.parse(testdata.citiesxml);
+
+    data.should.be.an.instanceOf(Array);
+    data.length.should.equal(1);
+
+    var countries = data[0]._children;
+    var uk = countries[0];
+    var cities = uk._children;
+
+    countries.length.should.equal(2);
+    uk._digger.tag.should.equal('country');
+    cities.length.should.equal(6);
+
+    cities[1]._children[2].population.should.equal(68);
+
+  })
+
+  it('should process attribute nodes', function(){
+    var data = XML.parse(testdata.attrxml);
+
+    data[0].notes.should.equal('hello world');
+  })
+
+  it('should stringify attribute nodes', function(){
+
+    var data = [{
+      _digger:{
+        tag:'foo'
+      },
+      html:"hello\nworld"
+    }]
+
+    var xml = XML.stringify(data);
+
+    var expect_xml = [
+      "<foo>",
+      "\t<attr name=\"html\">hello",
+      "world</attr>",
+      "</foo>",
+      ""
+    ].join("\n")
+
+    xml.should.equal(expect_xml)
+  })
+
+  it('should stringify all data', function(){
+
+    var data = [{
+      _digger:{
+        tag:'foo',
+        id:'bar',
+        class:['apple', 'orange']
+      },
+      height:10,
+      html:"hello\nworld"
+    }]
+
+    var xml = XML.stringify(data);
+
+    var expect_xml = [
+      "<foo id=\"bar\" class=\"apple orange\" height=\"10\">",
+      "\t<attr name=\"html\">hello",
+      "world</attr>",
+      "</foo>",
+      ""
+    ].join("\n")
+
+    xml.should.equal(expect_xml)
+
+
+  })
+
+
+  
+})

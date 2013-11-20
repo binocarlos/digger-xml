@@ -1,24 +1,22 @@
-TESTS = test/*.js
-REPORTER = spec
-#REPORTER = dot
+browser-test:
+	@echo browser test
+	@./node_modules/mocha-phantomjs/bin/mocha-phantomjs test/test-runner.html
 
-check: test
-
-test:
+server-test:
+	@echo server test
 	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--reporter $(REPORTER) \
+		--reporter spec \
 		--timeout 300 \
 		--require should \
 		--growl \
-		$(TESTS)
+		test/test.js
 
-browserify:
-	browserify src/index.js > build/container.js
+test: server-test browser-test
 
-uglify: browserify
-	uglifyjs build/container.js > build/container.min.js
-
-build: uglify
+build: install
+	@echo build ...
+	@component install
+	@component build
 
 install:
 	npm install
