@@ -115,19 +115,13 @@ world</attr>
 
 There are 2 sets of tests one for the npm node version and one for the component.
 
-To run all tests:
+To run the server tests:
 
 ```
 $ make test
 ```
 
-To run the server tests:
-
-```
-$ make server-test
-```
-
-And the browser ones (using phantomjs):
+And the browser ones (using phantomjs which you need to install):
 
 ```
 $ make browser-test
