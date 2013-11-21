@@ -1,4 +1,4 @@
-var XML = require('digger-xml');
+var XML = require(typeof module !== 'undefined' && module.exports ? '../src/server' : 'digger-xml');
 
 var testdata = {};
 
