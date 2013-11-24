@@ -1,8 +1,16 @@
-browser-test:
-	@echo browser test
+install:
+	@npm install
+
+build: install
+	@echo build ...
+	@./node_modules/.bin/component-install
+	@./node_modules/.bin/component-build
+
+browser-test: build
+	@echo browser test ...
 	@./node_modules/mocha-phantomjs/bin/mocha-phantomjs test/test-runner.html
 
-test:
+server-test:
 	@echo server test
 	@NODE_ENV=test ./node_modules/.bin/mocha \
 		--reporter spec \
@@ -11,12 +19,6 @@ test:
 		--growl \
 		test/test.js
 
-build: install
-	@echo build ...
-	@component install
-	@component build
+test: browser-test server-test
 
-install:
-	npm install
-
-.PHONY: test
+.PHONY: test build
