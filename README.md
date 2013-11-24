@@ -38,13 +38,13 @@ xml_string becomes:
 
 ## installation
 
-npm:
+as a node module:
 
 ```
 $ npm install digger-xml
 ```
 
-[component](https://github.com/component/component):
+as a [component](https://github.com/component/component):
 
 ```
 $ component install binocarlos/digger-xml
