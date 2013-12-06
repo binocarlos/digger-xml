@@ -3,6 +3,7 @@ install:
 
 build: install
 	@echo build ...
+	@mkdir -p build
 	@./node_modules/.bin/browserify \
 		src/index.js > build/build.js
 	@./node_modules/.bin/browserify \
