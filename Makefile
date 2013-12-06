@@ -3,8 +3,10 @@ install:
 
 build: install
 	@echo build ...
-	@./node_modules/.bin/component-install
-	@./node_modules/.bin/component-build
+	@./node_modules/.bin/browserify \
+		src/index.js > build/build.js
+	@./node_modules/.bin/browserify \
+		test/test.js > build/test.js		
 
 browser-test: build
 	@echo browser test ...

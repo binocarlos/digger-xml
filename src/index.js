@@ -15,20 +15,24 @@
 /*
   Module dependencies.
 */
-
-var xml = require('xmldom');
 var utils = require('./utils');
 
-module.exports.parse = XMLParser;
-module.exports.stringify = utils.toXML;
+module.exports = {
+  parse:process.browser ? BrowserXMLParser : ServerXMLParser,
+  stringify:utils.toXML
+}
 
+// this is so browserify does not include xmldom as a whole module
+function trick_browserify(){
+  return 'xmldom';
+}
 /*
 
   includes xmldom
   
 */
-function XMLParser(st){
-
+function ServerXMLParser(st){
+  var xml = require(trick_browserify());
   /*
   
     server side XML parsing
@@ -49,6 +53,57 @@ function XMLParser(st){
   return results;
 }
 
+
+
+function get_browser_parser(){
+  function MicrosoftXMLDOMParser() {
+    this.parser = new window.ActiveXObject('Microsoft.XMLDOM');
+  }
+
+  MicrosoftXMLDOMParser.prototype.parse = function (input) {
+    this.parser.async = false;
+    return this.parser.loadXml(input);
+  };
+
+  function XMLDOMParser() {
+    this.parser = new window.DOMParser();
+  }
+
+  XMLDOMParser.prototype.parse = function (input) {
+    return this.parser.parseFromString(input, 'text/xml');
+  };
+
+  if (window.DOMParser) {
+    return new XMLDOMParser();
+  } else if (window.ActiveXObject) {
+    return new MicrosoftXMLDOMParser();
+  } else {
+    throw new Error('Cannot parser XML in this environment.');
+  }
+
+}
+
+function BrowserXMLParser(xml){
+  var xmlParser = get_browser_parser();
+  xml = xml.replace(/^[^<]*/, '').replace(/[^>]*$/, '');
+
+  var domElement = xmlParser.parse(xml);
+  var doc = domElement.documentElement;
+  if(doc.nodeName=='html'){
+    return [];
+  }
+  else{
+    var node_arr = [];
+
+    for(var i=0; i<domElement.childNodes.length; i++){
+      node_arr[i] = domElement.childNodes[i];
+    }
+    
+    var results = node_arr.map(utils.data_factory);
+
+    return results;
+  }
+}
 /*
   This is the sync version of a warehouse search used by in-memory container 'find' commands
 
