@@ -44,11 +44,7 @@ as a node module:
 $ npm install digger-xml
 ```
 
-as a [component](https://github.com/component/component):
-
-```
-$ component install binocarlos/digger-xml
-```
+or in the browser using [browserify](https://github.com/substack/node-browserify)
 
 ## usage
 
